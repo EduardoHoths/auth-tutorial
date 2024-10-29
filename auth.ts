@@ -22,15 +22,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
 
   callbacks: {
-    // async signIn({ user }) {
-    //   if (!user.id) return false;
+    async signIn({ user, account }) {
+      if (account?.provider !== "credentials") {
+        return true;
+      }
 
-    //   const existingUser = await getUserById(user.id);
+      const existingUser = await getUserById(user.id!);
 
-    //   if (!existingUser || !existingUser.emailVerified) return false;
+      if (!existingUser?.emailVerified) {
+        return false;
+      }
 
-    //   return true;
-    // },
+      // TODO Add 2FA check
+
+      return true;
+    },
     async jwt({ token }) {
       if (!token.sub) return token;
 
