@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       `,
     };
 
-    await transport.sendMail(mailOptions);
+    transport.sendMail(mailOptions);
 
     return NextResponse.json(
       { message: "Email enviado com sucesso!" },
