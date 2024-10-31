@@ -3,31 +3,29 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { email, resetLink } = await req.json();
+    const { email, token } = await req.json();
 
-    if (!email || !resetLink) {
+    if (!email || !token) {
       return NextResponse.json(
-        { message: "Email and reset link are required" },
+        { message: "Email and token are required" },
         { status: 400 }
       );
     }
 
     sendMail({
       email,
-      subject: "Reset your password",
-      html: `
-      <p>Click <a href="${resetLink}">here</a> to reset your password.</p>
-      `,
+      subject: "2FA code",
+      html: `<p>Your 2FA code: ${token}</p>`,
     });
 
     return NextResponse.json(
-      { message: "Email sent successfully!" },
+      { message: "Email enviado com sucesso!" },
       { status: 200 }
     );
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { message: "Error sending email" },
+      { message: "Erro ao enviar email" },
       { status: 500 }
     );
   }

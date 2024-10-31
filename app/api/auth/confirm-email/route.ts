@@ -1,5 +1,5 @@
+import { sendMail } from "@/lib/sendMail";
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 
 export async function POST(req: Request) {
   try {
@@ -12,24 +12,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const transport = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: `Confirm your email`,
+    sendMail({
+      email,
+      subject: "Confirm your email",
       html: `
-        <p>Click <a href="${confirmLink}">here</a> to confirm email.</p>
+      <p>Click <a href="${confirmLink}">here</a> to confirm email.</p>
       `,
-    };
-
-    transport.sendMail(mailOptions);
+    });
 
     return NextResponse.json(
       { message: "Email enviado com sucesso!" },
