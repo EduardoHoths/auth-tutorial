@@ -3,6 +3,7 @@ import { UserRole } from "./types/enum";
 
 export type ExtendedUser = DefaultSession["user"] & {
   role: UserRole;
+  isTwoFactorEnabled: boolean;
 };
 
 declare module "next-auth" {
